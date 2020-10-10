@@ -28,7 +28,7 @@ public class OpenMainPageTest {
         driver.get("https://otus.ru/");
         logger.info("Открыта страница отус");
         assertEquals(expectedTitle, driver.getTitle());
-        logger.info("Проверка Title страницы завершена");
+        logger.info("Проверка Title страницы завершена с успешным результатом");
     }
 
     @After
