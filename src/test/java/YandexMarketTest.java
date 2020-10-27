@@ -16,9 +16,9 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 
-public class YandexMarketTest {
+public class YandexMarketTest extends BaseTest {
 
-    protected static WebDriver driver;
+
     private Logger logger = LogManager.getLogger(YandexMarketTest.class);
 
     private String startURL = "https://market.yandex.ru/";
@@ -33,17 +33,10 @@ public class YandexMarketTest {
     private By compareButtonLocator = By.cssSelector("a[href='/my/compare-lists']");
     private By compareUnitListLocator = By.cssSelector("div[data-apiary-widget-id='/content/compareContent'] img");
 
-    @Before
-    public void setUp() {
-        //ввод опций через пробел внутри кавычек(если опций несколько), например: mvn clean test -Dbrowser="chrome" -Doptions="window-size=1920,1080 incognito" (для линукса кавычки одинарные)
-        driver = WebDriverFactory.create(System.getProperty("browser"), System.getProperty("options"));
 
-        //driver = WebDriverFactory.create("chrome");  //для запуска из ИДЕ (ручная отладка) или строкой выше, но тогда параметры будут браться из пом-файла
-        logger.info("Драйвер поднят");
-    }
 
     @Test
-    public void addedToCompare() {
+    public void addedToCompare()  {
         String model1 = "Samsung";
         String model2 = "Xiaomi";
 
@@ -54,7 +47,7 @@ public class YandexMarketTest {
        //2 перейти в Электроника - Смартфоны
         waitVisibilityElementAndClick(bluLocator, 5); // WebDriverWait w1 = new WebDriverWait(driver, 10).until(ExpectedConditions.invisibilityOfElementLocated(bluLocator)); этот способ на 6 сек больше
         driver.findElement(elektronikaLocator).click();
-        waitVisibilityElementAndClick(smartphoneLocator, 5);
+        waitVisibilityElementAndClick(smartphoneLocator, 10);
         logger.info("Перешли в раздел Электроника- Смартфоны");
 
         //3 Отфильтровать список товаров: Samsung & Xiaomi
@@ -86,16 +79,30 @@ public class YandexMarketTest {
 
         //9 Перейти в раздел сравнение
         driver.findElement(compareWidgetLocator).findElement(compareButtonLocator).click();
-        waitTitleIs("Сравнение товаров — Яндекс.Маркет", 5);
+        waitTitleIs("Сравнение товаров — Яндекс.Маркет", 10);
         logger.info("Перешли в раздел 'Сравнить'");
 
         //10 Проверить, что в списке товаров две позиции
         List<WebElement> compareUnitsList = driver.findElements(compareUnitListLocator);
         assertEquals(2, compareUnitsList.size());
         logger.info("Проверка, что в списке товаров две позиции успешно завершена");
-        assertEquals(samsungModel, compareUnitsList.get(0).getAttribute("alt"));
-        assertEquals(xiaomiModel, compareUnitsList.get(1).getAttribute("alt"));
+
+
+        assertUnitName(samsungModel, xiaomiModel, compareUnitsList);
+
+
         logger.info("Проверка наименований товаров в списке сравнений успешно завершена");
+    }
+
+    private void assertUnitName(String model1, String model2, List<WebElement> compareUnitsList) {
+        int model1Index = 0;
+        int model2Index = 1;
+        if (!model1.equals(compareUnitsList.get(model1Index).getAttribute("alt"))) {
+            model1Index = 1;
+            model2Index = 0;
+        }
+        assertEquals(model1, compareUnitsList.get(model1Index).getAttribute("alt"));
+        assertEquals(model2, compareUnitsList.get(model2Index).getAttribute("alt"));
     }
 
     private void waitTitleIs(String title, int timeOutInSeconds) {
@@ -104,15 +111,18 @@ public class YandexMarketTest {
     }
 
     private void filterByMaker(String makerName) {
-        waitVisibilityElement(makerLocator, 5);
-        WebElement makerList = driver.findElement(makerLocator);
-        makerList.findElement(By.xpath(".//span[contains(text(), '" + makerName + "')]")).click();
+        WebElement makerList = waitVisibilityElement(makerLocator, 5);
+      //  WebElement makerList = driver.findElement(makerLocator);
+        By makerNameLocator = By.xpath(".//span[contains(text(), '" + makerName + "')]");
+        makerList.findElement(makerNameLocator).click();
     }
 
     private void assertCompareWidgetText(String phoneModel) {
-        waitVisibilityElement(compareWidgetLocator, 10);
+        WebElement compareWidget = waitVisibilityElement(compareWidgetLocator, 10);
         String expectedTextinWidget = "Товар " + phoneModel + " добавлен к сравнению";
-        String actualTextWidget = driver.findElement(compareWidgetLocator).findElement(By.cssSelector("div > div:nth-child(2) > div:first-child")).getAttribute("innerText");
+        By unitNameInWidgetLocator = By.cssSelector("div > div:nth-child(2) > div:first-child");
+    //    String actualTextWidget = driver.findElement(compareWidgetLocator).findElement(unitNameInWidgetLocator).getAttribute("innerText");
+        String actualTextWidget = compareWidget.findElement(unitNameInWidgetLocator).getAttribute("innerText");
         assertEquals(expectedTextinWidget, actualTextWidget);
         logger.info("Проверка, что отобразилась плашка с именем товара {} успешно завершена", phoneModel);
     }
@@ -136,8 +146,7 @@ public class YandexMarketTest {
             if (namePhone.contains(phoneModel)) {
                 action.moveToElement(phone).build().perform();
                 By currentCompareLocator = By.cssSelector("div[data-zone-name='snippetList'] article:nth-child(" + (i + 1) + ") div[aria-label*='сравнению']");
-                waitVisibilityElement(currentCompareLocator, 5);
-                driver.findElement(currentCompareLocator).click();
+                waitVisibilityElementAndClick(currentCompareLocator, 5);
                 return namePhone;
             }
         }
@@ -149,16 +158,11 @@ public class YandexMarketTest {
         wait.until(ExpectedConditions.visibilityOfElementLocated(locator)).click();
     }
 
-    private void waitVisibilityElement(By locator, int timeInSec) {
+    private WebElement waitVisibilityElement(By locator, int timeInSec) {
         WebDriverWait wait = new WebDriverWait(driver, timeInSec);
-        wait.until(ExpectedConditions.visibilityOfElementLocated(locator));
+        return wait.until(ExpectedConditions.visibilityOfElementLocated(locator));
     }
 
 
-    @After
-    public void setDown() {
-        if (driver != null) {
-            driver.quit();
-        }
-    }
+
 }
