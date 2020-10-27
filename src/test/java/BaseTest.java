@@ -2,15 +2,12 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Test;
 import org.openqa.selenium.WebDriver;
 
-import static org.junit.Assert.assertEquals;
-
-public class OpenMainPageTest {
+public class BaseTest {
 
     protected static WebDriver driver;
-    private Logger logger = LogManager.getLogger(OpenMainPageTest.class);
+    private Logger logger = LogManager.getLogger(BaseTest.class);
 
     @Before
     public void setUp() {
@@ -19,15 +16,6 @@ public class OpenMainPageTest {
 
         //driver = WebDriverFactory.create("chrome");  //для запуска из ИДЕ (ручная отладка) или строкой выше, но тогда параметры будут браться из пом-файла
         logger.info("Драйвер поднят");
-    }
-
-    @Test
-    public void verifyTitleMainPage() {
-        String expectedTitle = "Онлайн‑курсы для профессионалов, дистанционное обучение современным профессиям";
-        driver.get("https://otus.ru/");
-        logger.info("Открыта страница отус");
-        assertEquals(expectedTitle, driver.getTitle());
-        logger.info("Проверка Title страницы завершена с успешным результатом");
     }
 
     @After
