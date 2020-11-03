@@ -6,7 +6,7 @@ import org.openqa.selenium.WebElement;
 
 import java.util.List;
 
-public class ComparePage extends BasePage {
+public class ComparePage extends AbstractPage {
     private By compareUnitListLocator = By.cssSelector("div[data-apiary-widget-id='/content/compareContent'] img");
 
     public ComparePage(WebDriver driver) {

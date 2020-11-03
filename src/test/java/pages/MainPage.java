@@ -6,7 +6,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 
-public class MainPage extends BasePage {
+public class MainPage extends AbstractPage {
     private Logger logger = LogManager.getLogger(MainPage.class);
     private String startURL = "https://market.yandex.ru/";
     private By bluLocator = By.xpath("//span[contains(text(), 'Напишите, какой товар вам нужен')]");            //локатор для синей всплывашки, которая загораживает пункты меню By.cssSelector("span[data-tid=ad8ef471]")

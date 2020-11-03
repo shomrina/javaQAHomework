@@ -3,7 +3,7 @@ package pages;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
-public class ElectronicPage extends BasePage {
+public class ElectronicPage extends AbstractPage {
     private By smartphoneLocator = By.cssSelector("[href^='/catalog--smartfony/']");                            // пункт меню Смартфоны          By.xpath("//a[contains(@href, '/catalog--smartfony/')]");
 
     public ElectronicPage(WebDriver driver) {

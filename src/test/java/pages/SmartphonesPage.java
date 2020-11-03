@@ -11,7 +11,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.util.List;
 
-public class SmartphonesPage extends BasePage {
+public class SmartphonesPage extends AbstractPage {
     private Logger logger = LogManager.getLogger(SmartphonesPage.class);
 
     private By makerLocator = By.cssSelector("fieldset[data-autotest-id='7893318']");                           //блок Производитель
