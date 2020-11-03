@@ -2,7 +2,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.Test;
 import pages.ComparePage;
-import pages.ElectronikPage;
+import pages.ElectronicPage;
 import pages.MainPage;
 import pages.SmartphonesPage;
 
@@ -24,8 +24,8 @@ public class YandexMarketTest extends BaseTest {
         mainPage.open();
 
        //2 перейти в Электроника - Смартфоны
-        ElectronikPage electronikPage = mainPage.openElectronikPage();
-        SmartphonesPage smartphonesPage = electronikPage.openSmartphonesPage();
+        ElectronicPage electronicPage = mainPage.openElectronicPage();
+        SmartphonesPage smartphonesPage = electronicPage.openSmartphonesPage();
         logger.info("Перешли в раздел Электроника- Смартфоны");
 
         //3 Отфильтровать список товаров: Samsung & Xiaomi

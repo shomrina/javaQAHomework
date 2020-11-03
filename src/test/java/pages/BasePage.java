@@ -13,11 +13,6 @@ public abstract class BasePage {
         this.driver = driver;
     }
 
-    protected void waitVisibilityElementAndClick(By locator, int timeInSec) {
-        WebDriverWait wait = new WebDriverWait(driver, timeInSec);
-        wait.until(ExpectedConditions.visibilityOfElementLocated(locator)).click();
-    }
-
     protected WebElement waitVisibilityElement(By locator, int timeInSec) {
         WebDriverWait wait = new WebDriverWait(driver, timeInSec);
         return wait.until(ExpectedConditions.visibilityOfElementLocated(locator));

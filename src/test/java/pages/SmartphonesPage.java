@@ -19,6 +19,8 @@ public class SmartphonesPage extends BasePage {
     private By productListLocator = By.cssSelector("article[data-autotest-id='product-snippet']");              //блок результатов поиска (находится список)
     private By compareWidgetLocator = By.cssSelector("[data-apiary-widget-id='/content/popupInformer'] > div"); //виджет с инфой о товаре, добавленном к сравнению
     private By compareButtonLocator = By.cssSelector("a[href='/my/compare-lists']");
+    private By unitNameInWidgetLocator = By.cssSelector("div > div:nth-child(2) > div:first-child");
+    private By firstCompareLocator = By.cssSelector("div[data-zone-name='snippetList'] article:nth-child(1) div[aria-label*='сравнению']");
 
     public SmartphonesPage(WebDriver driver) {
         super(driver);
@@ -26,7 +28,6 @@ public class SmartphonesPage extends BasePage {
 
     public void filterByMaker(String makerName) {
         WebElement makerList = waitVisibilityElement(makerLocator, 5);
-        //  WebElement makerList = driver.findElement(makerLocator);
         By makerNameLocator = By.xpath(".//span[contains(text(), '" + makerName + "')]");
         makerList.findElement(makerNameLocator).click();
     }
@@ -53,8 +54,7 @@ public class SmartphonesPage extends BasePage {
         //для того чтобы дождаться обновления списка след 4-ре строчки. вейт антил не помог
         Actions action = new Actions(driver);
         action.moveToElement(driver.findElements(productListLocator).get(0)).build().perform();
-        By currentCompareLocator = By.cssSelector("div[data-zone-name='snippetList'] article:nth-child(1) div[aria-label*='сравнению']");
-        waitVisibilityElement(currentCompareLocator, 5);
+        waitVisibilityElement(firstCompareLocator, 5);
     }
 
     private String addedFirstToCompare(List<WebElement> productsList, String phoneModel) {
@@ -65,7 +65,7 @@ public class SmartphonesPage extends BasePage {
             if (namePhone.contains(phoneModel)) {
                 action.moveToElement(phone).build().perform();
                 By currentCompareLocator = By.cssSelector("div[data-zone-name='snippetList'] article:nth-child(" + (i + 1) + ") div[aria-label*='сравнению']");
-                waitVisibilityElementAndClick(currentCompareLocator, 5);
+                waitVisibilityElement(currentCompareLocator, 5).click();
                 return namePhone;
             }
         }
@@ -74,7 +74,6 @@ public class SmartphonesPage extends BasePage {
 
     public String getUnitNameFromCompareWidget() {
         WebElement compareWidget = waitVisibilityElement(compareWidgetLocator, 10);
-        By unitNameInWidgetLocator = By.cssSelector("div > div:nth-child(2) > div:first-child");
         return compareWidget.findElement(unitNameInWidgetLocator).getAttribute("innerText");
     }
 
