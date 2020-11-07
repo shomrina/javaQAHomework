@@ -24,6 +24,8 @@ public class LkPageTest extends BaseTest {
         String contactType2 = "Skype";
         String contactValue2 = "filled_by_autotest";
         String englishLevel = "Средний (Intermediate)";
+        String login = System.getProperty("login");
+        String password = System.getProperty("password");
 
         //TEST
         //1. Открыть otus.ru
@@ -31,7 +33,7 @@ public class LkPageTest extends BaseTest {
         mainPage.open();
         //2. Авторизоваться на сайте
         LoginPage loginPage = mainPage.openLoginPage();
-        loginPage.auth();
+        loginPage.auth(login, password);
         //3. Войти в личный кабинет
         LKpersonalDataPage lKpersonalDataPage = mainPage.enterLK();
         //4. В разделе "О себе" заполнить все поля "Личные данные" и добавить не менее двух контактов
@@ -56,7 +58,7 @@ public class LkPageTest extends BaseTest {
         mainPage1.open();
         //7. Авторизоваться на сайте
         LoginPage loginPage1 = mainPage1.openLoginPage();
-        loginPage1.auth();
+        loginPage1.auth(login, password);
         //8. Войти в личный кабинет
         LKpersonalDataPage lKpersonalDataPage1 = mainPage1.enterLK();
         logger.info("Выполнен вход на сайт и авторизация в личном кабинете");

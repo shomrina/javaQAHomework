@@ -17,10 +17,9 @@ public class LoginPage extends AbstractPage {
         waitVisibilityOfElement(emailLocator, 5);
     }
 
-    public void auth() {
+    public void auth(String login, String password) {
         //todo вынести логин и пароль в параметры ввода при запуске теста из консоли
-        String login = "milagrous@gmail.com";
-        String password = "fJ!ntyy2wRg9Fdh";
+
 
         driver.findElement(emailLocator).sendKeys(login);
         driver.findElement(passwordLocator).sendKeys(password);
