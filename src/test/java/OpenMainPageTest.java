@@ -2,7 +2,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.*;
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -12,9 +11,8 @@ import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 
-public class OpenMainPageTest {
+public class OpenMainPageTest extends BaseTest {
 
-    protected static WebDriver driver;
     private Logger logger = LogManager.getLogger(OpenMainPageTest.class);
 
     By contactsBlockLocator = By.cssSelector("div[data-prefix='contact']");
@@ -33,15 +31,15 @@ public class OpenMainPageTest {
     By deleteButtonLocator = By.cssSelector("div.container__col_12:nth-child(4) > div:nth-child(2) > button:nth-child(1)");
     By buttonAddLocator = By.cssSelector("button.lk-cv-block__action:nth-child(6)");
     By saveAndContinueButtonLocator = By.xpath("//*[contains(text(), 'Сохранить и продолжить')]");
+    By contactTypeButtonLocator = By.cssSelector("div[data-selected-option-class='lk-cv-block__select-option_selected'] span");
+    By contactTypeListLocator = By.cssSelector("div[data-selected-option-class='lk-cv-block__select-option_selected']");
+    By contactValueInputs = By.cssSelector("input[type='text']");
+    By buttonEnterLKlocator = By.cssSelector("button.header2__auth");
+    By emailLocator = By.cssSelector("div.new-input-line_slim:nth-child(3) > input:nth-child(1)");
+    By avatarLocator = By.cssSelector(".ic-blog-default-avatar");
+    By myProfileButtonLocator = By.cssSelector("a[href='/lk/biography/personal/'] > div > b");
 
-    @Before
-    public void setUp() {
-        //ввод опций через пробел внутри кавычек(если опций несколько), например: mvn clean test -Dbrowser="chrome" -Doptions="window-size=1920,1080 incognito" (для линукса кавычки одинарные)
-        driver = WebDriverFactory.create(System.getProperty("browser"), System.getProperty("options"));
 
-        //driver = WebDriverFactory.create("chrome");  //для запуска из ИДЕ (ручная отладка) или строкой выше, но тогда параметры будут браться из пом-файла
-        logger.info("Драйвер поднят");
-    }
 
     @Ignore
     @Test
@@ -54,6 +52,7 @@ public class OpenMainPageTest {
 
     @Test
     public void fillAboutMyself() throws InterruptedException {
+        //TEST DATA
         String firstName = "Марина";
         String firstNameLatin = "Marina";
         String lastName = "Клипперт";
@@ -67,6 +66,7 @@ public class OpenMainPageTest {
         String contactValue2 = "filled_by_autotest";
         String englishLevel = "Средний (Intermediate)";
 
+        //TEST
         //1. Открыть otus.ru
         driver.get(baseURL);
      //   waitUntilTitleIs(5, titleMainPage);
@@ -97,9 +97,7 @@ public class OpenMainPageTest {
         logger.info("ЗАПУСК ПРОВЕРКИ В НОВОМ БРАУЗЕРЕ");
         //6. Открыть https://otus.ru в “чистом браузере”
         setDown();
-        logger.info("Текущие сессия и браузер закрыты");
         setUp();
-        logger.info("Драйвер поднят");
         driver.get(baseURL);
         //7. Авторизоваться на сайте
         auth();
@@ -108,7 +106,7 @@ public class OpenMainPageTest {
         logger.info("Выполнен вход на сайт и авторизация в личном кабинете");
         //9. Проверить, что в разделе о себе отображаются указанные ранее данные
      //   Assert.assertEquals("Marina", driver.findElement(By.id("id_fname_latin")).getAttribute("value"));
-        WebElement name1 = waitVisibilityOfElement(fnameLocator, 5); //(new WebDriverWait(driver, 5).until(ExpectedConditions.visibilityOfElementLocated(fnameLocator)));
+        WebElement name1 = waitVisibilityOfElement(fnameLocator, 5); 
         Assert.assertEquals(firstName, name1.getAttribute("value"));
         Assert.assertEquals(firstNameLatin, driver.findElement(fnameLatinLocator).getAttribute("value"));
         Assert.assertEquals(lastName, driver.findElement(lnameLocator).getAttribute("value"));
@@ -127,6 +125,7 @@ public class OpenMainPageTest {
     private void fillPersonalData(String firstName, String firstNameLatin, String lastName, String lastNameLatin, String dateOfBirthday) {
         //    waitUntilTitleIs(5, titleLKPage);
         // new WebDriverWait(driver, 10).until(ExpectedConditions.urlToBe("https://otus.ru/lk/biography/personal/"));
+        //todo refactoring!!!
         WebElement fname = (new WebDriverWait(driver, 5).until(ExpectedConditions.visibilityOfElementLocated(fnameLocator)));
         // WebElement fname = driver.findElement(fnameLocator);
         fname.clear();
@@ -150,7 +149,8 @@ public class OpenMainPageTest {
 
     private void saveAndContinue() {
         driver.findElement(saveAndContinueButtonLocator).click();
-        new WebDriverWait(driver, 10).until(ExpectedConditions.urlToBe("https://otus.ru/lk/biography/skills/"));
+        String urlSkillsPage = "https://otus.ru/lk/biography/skills/";
+        new WebDriverWait(driver, 10).until(ExpectedConditions.urlToBe(urlSkillsPage));
     }
 
     private void deleteAllContacts() {
@@ -188,41 +188,42 @@ public class OpenMainPageTest {
         (new WebDriverWait(driver, timeOutInSeconds)).until(ExpectedConditions.titleIs(pageTitle));
     }
 
-    @After
-    public void setDown() {
-        if (driver != null) {
-            driver.quit();
-        }
-    }
+
 
     private void addContact(String contactType, String contactValue) {
         WebElement contactsBlock = driver.findElement(contactsBlockLocator);  //получение блока способ связи, кнопка удалить и добавить (но если ничего не заполнено)
 
-        WebElement contact = contactsBlock.findElement(By.cssSelector("div[data-selected-option-class='lk-cv-block__select-option_selected'] span"));  //кнопка для выбора типа связи
-        contact.click(); //open selected options for contacts
+
+
+        WebElement contactButton = contactsBlock.findElement(contactTypeButtonLocator);  //кнопка для выбора типа связи
+        contactButton.click(); //open selected options for contacts
         //выбор типа связи
-        List<WebElement> contactSelectedList = contactsBlock.findElements(By.cssSelector("div[data-selected-option-class='lk-cv-block__select-option_selected']"));
+        List<WebElement> contactSelectedList = contactsBlock.findElements(contactTypeListLocator);
         WebElement contactSelected = contactSelectedList.get(contactSelectedList.size() - 1);
-        WebElement contact1 = (new WebDriverWait(driver, 5)).until(ExpectedConditions.elementToBeClickable(contactSelected.findElement(By.cssSelector("div > div >  button[data-value='" + contactType.toLowerCase() + "']"))));
-        contact1.click();
+
+        By contactTypeValueLocator = By.cssSelector("div > div >  button[data-value='" + contactType.toLowerCase() + "']");  //Выбор значения по названию
+        WebElement contactTypeValue = waitUntilElementToBeClickable(contactSelected.findElement(contactTypeValueLocator));
+        contactTypeValue.click();
         logger.info("Добавлен тип связи " + contactType);
 
         //ввод значения для выбранного типа связи
-        List<WebElement> contactInputs = contactsBlock.findElements(By.cssSelector("input[type='text']"));  //получить все текстовые инпуты блока
+
+        List<WebElement> contactInputs = contactsBlock.findElements(contactValueInputs);  //получить все текстовые инпуты блока
         contactInputs.get(contactInputs.size() - 1).sendKeys(contactValue);  //получить последний элемент в массиве - нужный нам инпут для ввода связи
         logger.info("Введено значение для типа связи: " + contactValue);
+    }
+
+    private WebElement waitUntilElementToBeClickable(WebElement webElement) {
+        return (new WebDriverWait(driver, 5)).until(ExpectedConditions.elementToBeClickable(webElement));
     }
 
     private void auth() {
         String login = "milagrous@gmail.com";
         String password = "fJ!ntyy2wRg9Fdh";
-        By buttonEnterLKlocator = By.cssSelector("button.header2__auth");
+
        // waitVisibilityOfElement(buttonEnterLKlocator, 5).click();
         driver.findElement(buttonEnterLKlocator).click();
-
-        By emailLocator = By.cssSelector("div.new-input-line_slim:nth-child(3) > input:nth-child(1)");
         waitVisibilityOfElement(emailLocator, 5).sendKeys(login);
-
         driver.findElement(By.cssSelector(".js-psw-input")).sendKeys(password);
         driver.findElement(By.cssSelector("div.new-input-line_last:nth-child(5) > button:nth-child(1)")).submit();
         logger.info("Авторизация прошла успешно");
@@ -234,11 +235,10 @@ public class OpenMainPageTest {
     }
 
     private void enterLK() {
-        By avatarLocator = By.cssSelector(".ic-blog-default-avatar");
         WebElement avatar = waitVisibilityOfElement(avatarLocator, 5);
         Actions actions = new Actions(driver);
         actions.moveToElement(avatar).build().perform();
-        driver.findElement(By.cssSelector("a[href='/lk/biography/personal/'] > div > b")).click();  //click by MY PROFILE
+        driver.findElement(myProfileButtonLocator).click();  //click by MY PROFILE
         logger.info("Перешли в личный кабинет");
     }
 
