@@ -5,6 +5,7 @@ import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
 
 import java.util.List;
 
@@ -12,96 +13,104 @@ import java.util.List;
 public class LKpersonalDataPage extends AbstractPage {
     private Logger logger = LogManager.getLogger(LKpersonalDataPage.class);
 
-    private WebElement buttonAdd;
-
     private By fnameLocator = By.id("id_fname");
-    private By fnameLatinLocator = By.id("id_fname_latin");
-    private By lnameLocator = By.id("id_lname");
-    private By lnameLatinLocator = By.id("id_lname_latin");
-    private By birthdayLocator = By.cssSelector(".input-icon > input:nth-child(1)");
-    private By countryLocator = By.cssSelector(".js-lk-cv-dependent-master > label:nth-child(1) > div:nth-child(2)");
-    private By cityLocator = By.cssSelector(".js-lk-cv-dependent-slave-city > label:nth-child(1) > div:nth-child(2)");
-    private By englishLevelLocator = By.cssSelector("div.container__col_12:nth-child(3) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(3) > div:nth-child(2) > div:nth-child(1) > label:nth-child(1) > div:nth-child(2)");
-    private By deleteButtonLocator = By.cssSelector("div.container__col_12:nth-child(4) > div:nth-child(2) > button:nth-child(1)");
-    private By buttonAddLocator = By.cssSelector("button.lk-cv-block__action:nth-child(6)");
     private By contactTypeButtonLocator = By.cssSelector("div[data-selected-option-class='lk-cv-block__select-option_selected'] span");
     private By contactTypeListLocator = By.cssSelector("div[data-selected-option-class='lk-cv-block__select-option_selected']");
     private By contactValueInputs = By.cssSelector("input[type='text']");
-    private By contactsBlockLocator = By.cssSelector("div[data-prefix='contact']");
-    private By saveAndContinueButtonLocator = By.xpath("//*[contains(text(), 'Сохранить и продолжить')]");
-
 
     public LKpersonalDataPage(WebDriver driver) {
         super(driver);
         waitVisibilityOfElement(fnameLocator, 5);
     }
 
+    @FindBy(css = "button.lk-cv-block__action:nth-child(6)")
+    private WebElement buttonAdd;
+
+    @FindBy(id = "id_fname")
+    private WebElement fname;
+
+    @FindBy(id = "id_fname_latin")
+    private WebElement fnameLatin;
+
+    @FindBy(id = "id_lname")
+    private WebElement lname;
+
+    @FindBy(id = "id_lname_latin")
+    private WebElement lnameLatin;
+
+    @FindBy(css = ".input-icon > input:nth-child(1)")
+    private WebElement birthday;
+
+    @FindBy(css = ".js-lk-cv-dependent-master > label:nth-child(1) > div:nth-child(2)")
+    private WebElement country;
+
+    @FindBy(css = ".js-lk-cv-dependent-slave-city > label:nth-child(1) > div:nth-child(2)")
+    private WebElement city;
+
+    @FindBy(css = "div.container__col_12:nth-child(3) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(3) > div:nth-child(2) > div:nth-child(1) > label:nth-child(1) > div:nth-child(2)")
+    private WebElement englishLevel;
+
+    @FindBy(css = "div.container__col_12:nth-child(4) > div:nth-child(2) > button:nth-child(1)")
+    private List<WebElement> deleteButton;                                                                                  //получить все кнопки "Удалить" для контактов
+
+    @FindBy(css = "div[data-prefix='contact']")
+    private WebElement contactsBlock;                                                                                       //получение блока способ связи, кнопка удалить и добавить (но если ничего не заполнено)
+
+    @FindBy(xpath = "//*[contains(text(), 'Сохранить и продолжить')]")
+    private WebElement saveAndContinueButton;
+
+
     public void fillPersonalData(String firstName, String firstNameLatin, String lastName, String lastNameLatin, String dateOfBirthday) {
-        //todo refactoring!!!
-        driver.findElement(fnameLocator).clear();
-        driver.findElement(fnameLocator).sendKeys(firstName);
-
-        driver.findElement(fnameLatinLocator).clear();
-        driver.findElement(fnameLatinLocator).sendKeys(firstNameLatin);
-
-
-        driver.findElement(lnameLocator).clear();
-        driver.findElement(lnameLocator).sendKeys(lastName);
-
-
-        driver.findElement(lnameLatinLocator).clear();
-        driver.findElement(lnameLatinLocator).sendKeys(lastNameLatin);
-
-
-        driver.findElement(birthdayLocator).clear();
-        driver.findElement(birthdayLocator).sendKeys(dateOfBirthday);
+        clearAndSendKeys(fname, firstName);
+        clearAndSendKeys(fnameLatin, firstNameLatin);
+        clearAndSendKeys(lname, lastName);
+        clearAndSendKeys(lnameLatin, lastNameLatin);
+        clearAndSendKeys(birthday, dateOfBirthday);
     }
 
+
     public void selectCountry(String selectedCountry) {
-        if(!driver.findElement(countryLocator).getText().contains(selectedCountry))
+        if(!country.getText().contains(selectedCountry))
         {
-            driver.findElement(countryLocator).click();
+            country.click();
             driver.findElement(By.xpath("//*[contains(text(), '" + selectedCountry + "')]")).click();
         }
     }
 
     public void selectCity(String selectedCity) {
-        if(!driver.findElement(cityLocator).getText().contains(selectedCity))
+        if(!city.getText().contains(selectedCity))
         {
-            driver.findElement(cityLocator).click();
+            city.click();
             driver.findElement(By.xpath("//*[contains(text(), '" + selectedCity + "')]")).click();
         }
     }
 
-    public void selectEngLevel(String englishLevel) {
-        if(!driver.findElement(englishLevelLocator).getText().contains(englishLevel))
+    public void selectEngLevel(String engLvl) {
+        if(!englishLevel.getText().contains(engLvl))
         {
-            driver.findElement(englishLevelLocator).click();
-            driver.findElement(By.xpath("//*[contains(text(), '" + englishLevel + "')]")).click();
+            englishLevel.click();
+            driver.findElement(By.xpath("//*[contains(text(), '" + engLvl + "')]")).click();
         }
     }
 
     public void deleteAllContacts() {
-        List<WebElement> deleteButtons = driver.findElements(deleteButtonLocator);                                          //get all buttons Delete for contact
-        for(WebElement deletes : deleteButtons) {                                                                           //click DELETE for all contacts
+        for(WebElement deletes : deleteButton) {                                                                           //нажать "Удалить" для всех контактов
             deletes.click();
         }
     }
 
     public void clickButtonAdd() {
-        if (buttonAdd == null) buttonAdd = driver.findElement(buttonAddLocator);
         buttonAdd.click();
         logger.info("Нажали 'Добавить'");
     }
 
     public void addContact(String contactType, String contactValue) {
-        WebElement contactsBlock = driver.findElement(contactsBlockLocator);                                                //получение блока способ связи, кнопка удалить и добавить (но если ничего не заполнено)
         WebElement contactButton = contactsBlock.findElement(contactTypeButtonLocator);                                     //кнопка для выбора типа связи
-        contactButton.click();                                                                                              //open selected options for contacts
+        contactButton.click();                                                                                              //открыть список опций для контактов
+
         //выбор типа связи
         List<WebElement> contactSelectedList = contactsBlock.findElements(contactTypeListLocator);
         WebElement contactSelected = contactSelectedList.get(contactSelectedList.size() - 1);
-
         By contactTypeValueLocator = By.cssSelector("div > div >  button[data-value='" + contactType.toLowerCase() + "']");  //Выбор значения по названию
         WebElement contactTypeValue = waitUntilElementToBeClickable(contactSelected.findElement(contactTypeValueLocator), 5);
         contactTypeValue.click();
@@ -114,41 +123,41 @@ public class LKpersonalDataPage extends AbstractPage {
     }
 
     public LKskillsPage saveAndContinue() {
-        driver.findElement(saveAndContinueButtonLocator).click();
+        saveAndContinueButton.click();
         logger.info("Введенные данные сохранены");
         return new LKskillsPage(driver);
     }
 
     public WebElement getFname ()  {
-        return driver.findElement(fnameLocator);
+        return fname;
     }
 
     public WebElement getFnameLatin ()  {
-        return driver.findElement(fnameLatinLocator);
+        return fnameLatin;
     }
 
     public WebElement getLname ()  {
-        return driver.findElement(lnameLocator);
+        return lname;
     }
 
     public WebElement getLnameLatin ()  {
-        return driver.findElement(lnameLatinLocator);
+        return lnameLatin;
     }
 
     public WebElement getBirthday ()  {
-        return driver.findElement(birthdayLocator);
+        return birthday;
     }
 
     public WebElement getCountry ()  {
-        return driver.findElement(countryLocator);
+        return country;
     }
 
     public WebElement getCity ()  {
-        return driver.findElement(cityLocator);
+        return city;
     }
 
     public WebElement getEnglishLevel ()  {
-        return driver.findElement(englishLevelLocator);
+        return englishLevel;
     }
 
 }

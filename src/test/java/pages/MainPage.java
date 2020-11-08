@@ -6,6 +6,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.FindBy;
 
 public class MainPage extends AbstractPage {
     private Logger logger = LogManager.getLogger(MainPage.class);
@@ -13,14 +14,17 @@ public class MainPage extends AbstractPage {
     private String baseURL = "https://otus.ru/";
     private String titleMainPage = "Онлайн‑курсы для профессионалов, дистанционное обучение современным профессиям";
 
-    private By buttonEnterLKlocator = By.cssSelector("button.header2__auth");
     private By avatarLocator = By.cssSelector(".ic-blog-default-avatar");
-    private By myProfileButtonLocator = By.cssSelector("a[href='/lk/biography/personal/'] > div > b");
-
 
     public MainPage(WebDriver driver) {
         super(driver);
     }
+
+    @FindBy(css = "button.header2__auth")
+    private WebElement buttonEnterLK;
+
+    @FindBy(css = "a[href='/lk/biography/personal/'] > div > b")
+    private WebElement myProfileButton;
 
     public void open() {
         driver.get(baseURL);
@@ -32,7 +36,7 @@ public class MainPage extends AbstractPage {
     }
 
     public LoginPage openLoginPage() {
-        driver.findElement(buttonEnterLKlocator).click();
+        buttonEnterLK.click();
         return new LoginPage(driver);
     }
 
@@ -41,7 +45,7 @@ public class MainPage extends AbstractPage {
         WebElement avatar = waitVisibilityOfElement(avatarLocator, 5);
         Actions actions = new Actions(driver);
         actions.moveToElement(avatar).build().perform();
-        driver.findElement(myProfileButtonLocator).click();  //click by MY PROFILE
+        myProfileButton.click();                                                                    //click by MY PROFILE
         logger.info("Перешли в личный кабинет");
         return new LKpersonalDataPage(driver);
     }

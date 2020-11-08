@@ -41,7 +41,7 @@ public class LkPageTest extends BaseTest {
         lKpersonalDataPage.selectCountry(country);                            //Страна
         lKpersonalDataPage.selectCity(city);                                  //Город
         lKpersonalDataPage.selectEngLevel(englishLevel);                      //уровень англ.
-        //контактная информация. добавление контактов todo возможно нелучшее решение с отдельной строкой на удаление (выходит из логики шагов теста)
+        //контактная информация. добавление контактов
         lKpersonalDataPage.deleteAllContacts();                               //удаление всех контактов (чтобы не делать проверку на их существование)
         lKpersonalDataPage.clickButtonAdd();
         lKpersonalDataPage.addContact(contactType1, contactValue1);
@@ -50,9 +50,10 @@ public class LkPageTest extends BaseTest {
         lKpersonalDataPage.addContact(contactType2, contactValue2);
         //5. Нажать сохранить
         lKpersonalDataPage.saveAndContinue();
-        logger.info("ЗАПУСК ПРОВЕРКИ В НОВОМ БРАУЗЕРЕ");
+
         //6. Открыть https://otus.ru в “чистом браузере”
         setDown();
+        logger.info("ЗАПУСК ПРОВЕРКИ В НОВОМ БРАУЗЕРЕ");
         setUp();
         MainPage mainPage1 = new MainPage(driver);
         mainPage1.open();
@@ -72,9 +73,6 @@ public class LkPageTest extends BaseTest {
         Assert.assertEquals(city, lKpersonalDataPage1.getTextElement(lKpersonalDataPage1.getCity()));
         Assert.assertEquals(englishLevel, lKpersonalDataPage1.getTextElement(lKpersonalDataPage1.getEnglishLevel()));
         logger.info("Все проверки пройдены успешно");
-
-        //todo добавить проверку что есть инфа о контактах
-
     }
 
 }

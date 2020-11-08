@@ -12,6 +12,7 @@ public class BaseTest {
     @Before
     public void setUp() {
         //ввод опций через пробел внутри кавычек(если опций несколько), например: mvn clean test -Dbrowser="chrome" -Doptions="window-size=1920,1080 incognito" (для линукса кавычки одинарные)
+        //или пример mvn clean test -Dbrowser="chrome" -Doptions="start-maximized" -Dlogin="log" -Dpassword="pass"
         driver = WebDriverFactory.create(System.getProperty("browser"), System.getProperty("options"));
 
         //driver = WebDriverFactory.create("chrome");  //для запуска из ИДЕ (ручная отладка) или строкой выше, но тогда параметры будут браться из пом-файла
