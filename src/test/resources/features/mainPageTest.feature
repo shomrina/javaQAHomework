@@ -1,5 +1,5 @@
 Feature: The Main Page tests
-  
+
   Background:
    Given Browser is started
 
