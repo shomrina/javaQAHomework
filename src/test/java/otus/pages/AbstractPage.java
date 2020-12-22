@@ -1,4 +1,4 @@
-package pages;
+package otus.pages;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -7,7 +7,7 @@ import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-public abstract class AbstractPage {
+public class AbstractPage {
     protected WebDriver driver;
 
     public AbstractPage(WebDriver driver) {
@@ -44,6 +44,5 @@ public abstract class AbstractPage {
         webElement.clear();
         webElement.sendKeys(value);
     }
-
 
 }

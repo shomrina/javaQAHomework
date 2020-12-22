@@ -1,12 +1,13 @@
-package pages;
+package otus.pages;
 
-import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
+
 
 public class MainPage extends AbstractPage {
     private Logger logger = LogManager.getLogger(MainPage.class);
@@ -49,6 +50,7 @@ public class MainPage extends AbstractPage {
         logger.info("Перешли в личный кабинет");
         return new LKpersonalDataPage(driver);
     }
+
 
 
 }

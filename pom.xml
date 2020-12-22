@@ -15,6 +15,8 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <browser>chrome</browser>
         <options>start-maximized</options>
+        <login>milagrous@gmail.com</login>
+        <password>fJ!ntyy2wRg9Fdh</password>
     </properties>
 
     <dependencies>
@@ -56,6 +58,25 @@
             <version>1.7.25</version>
             <scope>test</scope>
         </dependency>
+        <!-- настройки cucumber -->
+        <dependency>
+            <groupId>io.cucumber</groupId>
+            <artifactId>cucumber-java</artifactId>
+            <version>6.1.1</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.cucumber</groupId>
+            <artifactId>cucumber-core</artifactId>
+            <version>6.1.1</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.cucumber</groupId>
+            <artifactId>cucumber-junit</artifactId>
+            <version>6.1.1</version>
+            <scope>test</scope>
+        </dependency>
 
 
     </dependencies>
@@ -66,10 +87,67 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <configuration>
-                    <systemPropertyVariables>
+                   <!-- <systemPropertyVariables>
                         <browser>${browser}</browser>
-                        <options>${options}</options>
-                    </systemPropertyVariables>
+                        <options>c</options>
+                        <login>${login}</login>
+                        <password>${password}</password>
+                    </systemPropertyVariables>-->
+                   <!-- <systemProperties>
+                        <systemProperty>
+                            <key>browser</key>
+                            <value>chrome</value>
+                        </systemProperty>
+                        <systemProperty>
+                            <key>options</key>
+                            <value>start-maximized</value>
+                        </systemProperty>
+                        <systemProperty>
+                            <key>login</key>
+                            <value>milagrous@gmail.com</value>
+                        </systemProperty>
+                        <systemProperty>
+                            <key>password</key>
+                            <value>fJ!ntyy2wRg9Fdh</value>
+                        </systemProperty>
+                    </systemProperties>-->
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>1.3.2</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>java</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <!--<mainClass>com.example.Main</mainClass>
+                    <arguments>
+                        <argument>argument1</argument>
+                    </arguments>-->
+                    <systemProperties>
+                        <systemProperty>
+                            <key>browser</key>
+                            <value>chrome</value>
+                        </systemProperty>
+                        <systemProperty>
+                            <key>options</key>
+                            <value>start-maximized</value>
+                        </systemProperty>
+                        <systemProperty>
+                            <key>login</key>
+                            <value>milagrous@gmail.com</value>
+                        </systemProperty>
+                        <systemProperty>
+                            <key>password</key>
+                            <value>fJ!ntyy2wRg9Fdh</value>
+                        </systemProperty>
+                    </systemProperties>
                 </configuration>
             </plugin>
         </plugins>

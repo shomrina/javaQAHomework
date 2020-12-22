@@ -1,21 +1,48 @@
+package otus.steps;
+
+import io.cucumber.java.After;
+import io.cucumber.java.Before;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.junit.After;
-import org.junit.Before;
 import org.openqa.selenium.WebDriver;
+import otus.hooks.Hooks;
+import otus.util.WebDriverFactory;
 
 public class BaseTest {
+
     protected static WebDriver driver;
+    private Logger logger = LogManager.getLogger(Hooks.class);
+
+
+
+
+
+
+
+
+/*    protected static WebDriver driver;
     private Logger logger = LogManager.getLogger(BaseTest.class);
 
+    public BaseTest() {
+        if (driver == null) {
+            //driver = WebDriverFactory.create(System.getProperty("browser"), System.getProperty("options"));
+            driver = WebDriverFactory.create("chrome", "start-maximized");
+             logger.info("Драйвер поднят");
+        }
+    }
 
-    @Before
+    public WebDriver getWebDriver() {
+        return driver;
+    }*/
+
+
+/*    @Before
     public void setUp() {
         //ввод опций через пробел внутри кавычек(если опций несколько), например: mvn clean test -Dbrowser="chrome" -Doptions="window-size=1920,1080 incognito" (для линукса кавычки одинарные)
         //или пример mvn clean test -Dbrowser="chrome" -Doptions="start-maximized" -Dlogin="log" -Dpassword="pass"
         driver = WebDriverFactory.create(System.getProperty("browser"), System.getProperty("options"));
 
-        //driver = WebDriverFactory.create("chrome");  //для запуска из ИДЕ (ручная отладка) или строкой выше, но тогда параметры будут браться из пом-файла
+        //driver = otus.util.WebDriverFactory.create("chrome");  //для запуска из ИДЕ (ручная отладка) или строкой выше, но тогда параметры будут браться из пом-файла
         logger.info("Драйвер поднят");
     }
 
@@ -25,5 +52,5 @@ public class BaseTest {
             driver.quit();
         }
         logger.info("Текущие сессия и браузер закрыты");
-    }
+    }*/
 }
