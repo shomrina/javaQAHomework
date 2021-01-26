@@ -41,7 +41,6 @@ public class MainPage extends AbstractPage {
         return new LoginPage(driver);
     }
 
-    //todo сделать отдельный класс под главную страницу с авторизацией? или так оставить?
     public LKpersonalDataPage enterLK() {
         WebElement avatar = waitVisibilityOfElement(avatarLocator, 5);
         Actions actions = new Actions(driver);
