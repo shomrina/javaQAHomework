@@ -10,7 +10,7 @@ public class MainPage extends AbstractPage {
     private Logger logger = LogManager.getLogger(MainPage.class);
     private String startURL = "https://market.yandex.ru/";
     private By bluLocator = By.xpath("//span[contains(text(), 'Напишите, какой товар вам нужен')]");            //локатор для синей всплывашки, которая загораживает пункты меню By.cssSelector("span[data-tid=ad8ef471]")
-    private By elektronikaLocator = By.cssSelector("div[role=tablist] div[data-zone-name]:nth-child(5)");       //пункт меню Электроника
+    private By elektronikaLocator = By.cssSelector("[href*='/catalog--elektronika/'] > span");       //пункт меню Электроника
 
     public MainPage(WebDriver driver) {
         super(driver);
